@@ -2,7 +2,7 @@ from django.conf import settings
 from django.utils import unittest
 from url_images import ImageModifier
 from url_images.exceptions import ResizerFormatException
-from url_images.mods import AutotrimMod, CropMod, ResizeMod
+from url_images.mods import CropMod, ResizeMod
 import os
 import Image
 
@@ -18,33 +18,33 @@ class ModifierTestCase(unittest.TestCase):
 
     def test_process_path_nochange(self):
         path = '/path/to/image.jpg'
-        modifier = ImageModifier(path,self.base_config)
+        modifier = ImageModifier(path, self.base_config)
         
         filename = modifier.source_filename
         params = modifier._params
         
-        self.assertEquals(filename,'/path/to/image.jpg')
-        self.assertEquals(params['type'],'jpg')
+        self.assertEquals(filename, '/path/to/image.jpg')
+        self.assertEquals(params['type'], 'jpg')
         
     def test_process_path_invalid_ext(self):
         path = '/path/to/image.ext'
 
         with self.assertRaises(ResizerFormatException):
-            ImageModifier(path,self.base_config)
+            ImageModifier(path, self.base_config)
             
     def test_process_path_change_ext(self):
         path = '/path/to/image.jpg.to.gif'
-        modifier = ImageModifier(path,self.base_config)
+        modifier = ImageModifier(path, self.base_config)
         
         filename = modifier.source_filename
         params = modifier._params
         
-        self.assertEquals(filename,'/path/to/image.jpg')
-        self.assertEquals(params['type'],'gif')
+        self.assertEquals(filename, '/path/to/image.jpg')
+        self.assertEquals(params['type'], 'gif')
         
     def test_process_path_with_param(self):
         path = '/path/to/image.jpg.width-300.png'
-        modifier = ImageModifier(path,self.base_config)
+        modifier = ImageModifier(path, self.base_config)
         
         filename = modifier.source_filename
         params = modifier._params
@@ -56,7 +56,7 @@ class ModifierTestCase(unittest.TestCase):
 
     def test_process_path_with_params(self):
         path = '/path/to/image.jpg.width-300_height-200.png'
-        modifier = ImageModifier(path,self.base_config)
+        modifier = ImageModifier(path, self.base_config)
         
         filename = modifier.source_filename
         params = modifier._params
@@ -69,7 +69,7 @@ class ModifierTestCase(unittest.TestCase):
         
     def test_process_path_with_unusual_params(self):
         path = '/path/to/image.jpg.width-300_height-200_crop-400,40,1000,1000.png'
-        modifier = ImageModifier(path,self.base_config)
+        modifier = ImageModifier(path, self.base_config)
         
         filename = modifier.source_filename
         params = modifier._params

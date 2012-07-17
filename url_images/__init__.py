@@ -25,7 +25,7 @@ def get_class(kls):
         for comp in parts[1:]:
             m = getattr(m, comp)
         return m
-    except (ImportError, AttributeError), e:
+    except (ImportError, AttributeError) as e:
         raise ResizerConfigurationError('Error importing class "%s"' % kls)
 
 
@@ -107,7 +107,7 @@ class ImageModifier(object):
         
         p_result = self.process_check(name)
         c_result = self.convert_check(name)
-        
+       
         if p_result:
             filename = p_result.group('filename')
             type = p_result.group('type')            
@@ -125,7 +125,7 @@ class ImageModifier(object):
             type = c_result.group('type')
             params = {}
         else:
-            filename = self._url
+            filename = name
             type = os.path.splitext(name)[1][1:]
 
             params = {}
@@ -133,7 +133,7 @@ class ImageModifier(object):
         params['type'] = type
         
         self._params = params
-        self.source_filename = os.path.join(path,filename)
+        self.source_filename = os.path.join(path, filename)
 
         if self._params['type'] not in self.output_formats:
             raise ResizerFormatError("Invalid output format")
@@ -210,8 +210,8 @@ class BaseImageHandler(object):
             if not c.check(m.source_path()):
                 data = m.generate_image()
                 c.write(data)
-            return self.response_backend(config, m.get_mime_type(),c,start_response).build_response()
-        except Exception, e:
+            return self.response_backend(config, m.get_mime_type(), c, start_response).build_response()
+        except Exception as e:
             return error404(path, start_response)
 
 
